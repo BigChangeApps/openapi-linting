@@ -1,0 +1,457 @@
+extends: [[spectral:oas, off]]
+functionsDir: './functions'  
+functions:
+  - naming-convention
+
+rules:
+
+#RS100 - n/a
+
+#RS101 - n/a
+
+#RS102 - n/a
+
+#RS103
+  uris-overly-nested:
+    description: RS103 - URIs should not be overly uris-overly-nested
+    message: "{{description}} (max 3 dynamic path parameters)"
+    severity: warn
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(.*{{1}.*){4,}
+
+#RS104
+  uris-trailing-slash:
+    description: RS104 - URIs must not require trailing slashes
+    message: "{{description}} ({{path}})"
+    severity: error
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/$"
+
+#RS105
+  uris-use-descriptive-id-path-names:
+    description: RS105 - URI dynamic path parameters must be named correctly
+    message: "{{description}} ('{{value}}')"
+    severity: error
+    given: "$..parameters[?(@.in == 'path')]"
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: \b(id|Id|ID|iD)\b
+
+#RS106
+  uris-resource-name-not-contain-api:
+    description: RS106 - URI resource / endpoint names must not include 'api'
+    message: "{{description}} ('{{path}}')"
+    severity: error
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /api|/api/|-api/|api$/i
+        
+#RS107
+  uris-paths-params-camel-case:
+    description: RS107 - URI path parameters must use camel case
+    message: "{{description}} ('{{value}}')"
+    severity: error
+    given: $.paths.*.*.parameters[?(@.in=='path')].name
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+        disallowDigits: true
+
+#RS108
+  headers-no-x-prefix:
+    description: RS108 - Headers must be prefixed by 'X-'
+    message: "{{description}} ('{{value}}')"
+    severity: error
+    given: "$..parameters[?(@.in == 'header')].name"
+    recommended: true
+    type: style
+    then: 
+      function: pattern
+      functionOptions:
+        notMatch: "/^(x|X)-/"
+
+#RS109
+  headers-hyphenated-pascal-case:
+    description: RS109 - Headers must use Hyphenated-Pascal-Case notation
+    message: "{{description}} ('{{value}}')"
+    severity: error
+    given: "$..parameters[?(@.in == 'header')].name"
+    recommended: true
+    type: style
+    then: 
+      function: pattern
+      functionOptions:
+        match: "/^([A-Z][a-z0-9]-)*([A-Z][a-z0-9])+/"
+
+#RS200
+  openapi-above-v3:
+    description: RS200 - Every API must provide a OpenAPI v3.0 specification (or above)
+    message: "{{description}} ('{{error}}')"
+    severity: error
+    given: "$"
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: "^[3-9][0-9.]*$"
+
+#RS201 - n/a
+
+#RS202
+  endpoint-summary-length:
+    description: "RS202 - HTTP methods must be properly described"
+    message: "{{description}} (summary must be at least 8 characters)"
+    severity: error
+    given: $.paths[*][*].summary
+    then:
+      function: length
+      functionOptions:
+        min: 8
+
+  endpoint-description-length:
+    description: "RS202 - HTTP methods must be properly described"
+    message: "{{description}} (description must be at least 15 characters)"
+    severity: error
+    given: $.paths[*][*].description
+    then:
+      function: length
+      functionOptions:
+        min: 15
+
+#RS203 - n/a
+
+#RS204
+  request-query-params-documentation-missing:
+    description: RS204 - HTTP methods must document all query string parameters
+    severity: error
+    message: "{{description}}"
+    given: $.paths.*.*.parameters[?(@.in=='query')]
+    then:
+      field: "description"
+      function: defined
+
+#RS205 - n/a
+
+#RS206
+  schema-properties-documentation-missing:
+    description: RS206 - Payload schema fields must clearly document their purpose
+    severity: error
+    message: "{{description}} ({{error}})"
+    given: '$..*.properties[*]'
+    then:
+      field: "description"
+      function: defined
+
+  schema-properties-documentation-minlength:
+    description: RS206 - Payload schema fields must clearly document their purpose
+    severity: warn
+    message: "{{description}} ({{property}} is less than 15 characters)"
+    given: '$..*.properties[*].description'
+    then:
+      function: length
+      functionOptions:
+        min: 15
+
+#RS207
+  schema-properties-example-missing:
+    description: RS207 - Payload schema fields must provide an example value
+    severity: warn
+    message: "{{description}} ({{error}})"
+    given: '$..*.properties[*]'
+    then:
+      field: "example"
+      function: defined
+
+#RS208 - n/a
+
+#RS209
+  endpoint-responses-common-server-error:
+    description: RS209 - HTTP methods should include standard 500 response
+    severity: warn
+    given: $.paths..responses
+    then:
+      field: '500'
+      function: truthy
+
+#RS210
+  schema-properties-documentation-full-stop-ending:
+    description: RS210 - Payload field documentation should not be automatically generated
+    severity: warn
+    message: "{{description}} ('{{value}}' ends with a full stop)"
+    given: '$..*.properties[*].description'
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[^.].*[^-_.]$"
+
+  schema-properties-documentation-gets-prefix:
+    description: RS210 - Payload field documentation should not be automatically generated
+    severity: warn
+    message: "{{description}} ('{{value}}' starts with 'Gets')"
+    given: '$..*.properties[*].description'
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^Gets"
+
+#RS300
+  request-GET-no-body:
+    description: "RS300 - GET methods must not accept a request body"
+    severity: error
+    given: $.paths..get.parameters..in
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/^body$/"
+
+#RS301 - n/a
+
+#RS302 - n/a
+
+#RS303 - n/a
+
+#RS304
+  response-collections-enveloped:
+    description: RS304 - GET methods must envelope their result sets when returning collections
+    severity: error
+    given: $.paths[*][*][responses][*].schema
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        notMatch: '/^array$/'
+
+#RS305 - n/a
+
+#RS306 - n/a
+
+#RS307
+  request-writes-no-query-strings:
+    description: RS307 - POST and DELETE requests should not require query strings
+    severity: warn
+    given:
+    - $.paths[*].[put,post,delete].parameters.[?(@.in == 'query')].schema
+    then:
+      function: undefined
+
+#RS308 - n/a
+
+#RS309 - n/a
+
+#RS310
+  request-query-params-not-required:
+    description: "RS310 - Query parameters should be optional"
+    severity: warn
+    given: $.paths.*.*.parameters[?(@.in=='query')].required
+    then:
+      function: falsy
+
+#RS311
+  request-query-params-camel-case:
+    description: "RS311 - Query string parameters must use camelCase"
+    message: "{{description}} ('{{value}}')"
+    severity: error
+    given: $.paths.*.*.parameters[?(@.in=='query')].name
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+        disallowDigits: false
+
+#RS400
+  operation-success-response: error
+  get-response-codes:
+      description: RS400 - HTTP responses must return an acceptable status code
+      message: "{{description}} (GETs must provide a 200 response)"
+      severity: error
+      given: $.paths[*].get.responses
+      then:
+        function: schema
+        functionOptions:
+          schema:
+            oneOf:
+            - required: ['200']
+
+  delete-response-codes:
+    description: RS400 - HTTP responses must return an acceptable status code
+    message: "{{description}} (DELETEs must provide a 202 or 204 response)"
+    severity: error
+    given: $.paths[*].delete.responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+          - required: ['202', '204']
+            not:
+              required: ['200', '201']
+
+  put-response-codes:
+    description: RS400 - HTTP responses must return an acceptable status code
+    message: "{{description}} (PUTs must provide a 202 or 204 response)"
+    severity: error
+    given: $.paths[*].put.responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+          - required: ['202', '204']
+            not:
+              required: ['200', '201']
+
+  post-response-codes:
+    description: RS400 - HTTP responses must return an acceptable status code
+    message: "{{description}} (POSTs must provide a 201 or 202 response)"
+    severity: error
+    given: $.paths[*].post.responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+          - required: ['201', '202']
+            not:
+              required: ['200', '204']
+
+#RS401 - n/a
+
+#RS402 - n/a
+
+#RS403
+  response-204-no-body:
+    description: RS403 - PUT/DELETE responses must not return a response body when status code is 204
+    severity: error
+    given: $.paths[*][*]].responses.204
+    then:
+      field: content
+      function: undefined
+
+#RS500
+  request-support-json:
+    description: RS500 - APIs must support JSON as payload data interchange format
+    severity: error
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('json') === -1)]^
+    then:
+      function: falsy
+
+  response-success-support-json:
+    description: RS500 - APIs must support JSON as payload data interchange format
+    severity: error
+    given: $.paths..responses[?( @property >= 200 && @property < 300 && @property != 204)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - application/json
+
+#RS501
+  schema-names-pascal-case:
+    description: RS501 - APIs must use camelCase for request / response payload schema
+    message: "{{description}} ('{{property}}')"
+    severity: error
+    type: style
+    given: '$.components.schemas.*~'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[A-Z][a-zA-Z0-9]*$'
+
+  schema-property-names-camelCase:
+    description: RS501 - APIs must use camelCase for request / response payload schema
+    message: "{{description}} ('{{property}}')"
+    severity: error
+    resolved: false
+    given: $..[?(@.type === 'object' && @.properties)].properties.*~
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+
+#RS502 - n/a
+
+#RS503 - n/a
+
+#RS504
+  schema-property-boolean-naming-convention:
+    description: RS504 - Boolean fields should be consistently named
+    message: "{{description}} ({{error}})"
+    severity: warn
+    given: $
+    then:
+      function: naming-convention
+      functionOptions:
+        type: boolean
+        match: ^is
+
+#RS505
+
+  schema-property-datetime-naming-convention:
+    description: RS505 - Timestamp fields should be consistently named
+    message: "{{description}} ({{error}})"
+    severity: warn
+    given: $
+    then:
+      function: naming-convention
+      functionOptions:
+        type: date-time
+        match: 'At$'
+
+#RS600  
+  response-fail-support-problem-json:
+    description: "RS600 - Error responses must be presented in a standard format (application/problem+json)"
+    severity: error
+    given: $.paths..responses[?( @property >= 400)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - application/problem+json
+
+#RS601 - n/a
+
+#RS700
+  path-must-include-version:
+    description: RS700 - API specifications must use URI based versioning
+    severity: error
+    resolved: false
+    given: '$.paths[*]~'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^/v[0-9]/.*$'
+
+#RS701 - n/a
+
+#RS702 - n/a
+
+#RS800
+  https-only:
+    description: "RS800 - Public APIs must exclusively use HTTPS"
+    severity: error
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: "/^https:/"
+
+#RS900
+  health-check:
+    message: RS900 - APIs should include a health check path (/healthcheck)
+    severity: warn
+    formats: ['oas2','oas3']
+    given: $.paths
+    then:
+        field: "/healthcheck"
+        function: truthy
