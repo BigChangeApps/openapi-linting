@@ -4,6 +4,23 @@ The repository provides [BigChange's OpenAPI linting rules](https://raw.githubus
 ## Installation
 Spectral requires Node version 14 or later:
 ```
-npm i @stoplight/spectral-cli -g
+yarn global add @stoplight/spectral-cli
 ```
 ## Usage
+
+### Remote ruleset
+You can apply these rules by providing the URL directly on the command line:
+```
+spectral lint -r https://raw.githubusercontent.com/BigChangeApps/openapi-linting/main/rest/.spectral.yaml petstore.yaml
+```
+### Local ruleset
+For added flexibility and the ability to extend the ruleset we provide, we recommend that you create a local spectral ruleset (.spectral.yml) that remotely references this one:
+```
+extends: 
+- https://raw.githubusercontent.com/BigChangeApps/openapi-linting/main/rest/.spectral.yaml 
+
+rules:
+ response-fail-support-problem-json: off
+ schema-properties-documentation-missing: warn
+```
+
