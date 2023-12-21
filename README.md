@@ -18,9 +18,20 @@ For added flexibility and the ability to extend the ruleset we provide, we recom
 ```
 extends: 
 - https://raw.githubusercontent.com/BigChangeApps/openapi-linting/main/rest/.spectral.yaml 
+```
+Additional rules can then be added, rules can be turned off and warning severities can be adjusted locally:
+```
+extends: 
+- https://raw.githubusercontent.com/BigChangeApps/openapi-linting/main/rest/.spectral.yaml 
 
 rules:
  response-fail-support-problem-json: off
  schema-properties-documentation-missing: warn
 ```
+### Rule application
+This tooling can be applied to any REST API that provides an OpenAPI specification, regardless of the language used to build that service. 
+
+As a command-line tool, it can easily be [inserted into existing continuous integration](https://meta.stoplight.io/docs/spectral/038632fdf0d1a-continuous-integration) solutions (after an up to date OpenAPI specification file has been built) and for best developer experience, we additionally recommend using [githooks](https://git-scm.com/docs/githooks) for more immediate linting feedback. Consider tools like [Husky](https://typicode.github.io/husky/) and [Husky.Net](https://alirezanet.github.io/Husky.Net/) for best results.
+
+
 
