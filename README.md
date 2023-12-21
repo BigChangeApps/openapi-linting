@@ -9,12 +9,12 @@ yarn global add @stoplight/spectral-cli
 ## Usage
 
 ### Remote ruleset
-You can apply these rules by providing the URL directly on the command line:
+You can apply these rules by providing the URL directly on the [command line](https://docs.stoplight.io/docs/spectral/9ffa04e052cc1-spectral-cli):
 ```
 spectral lint -r https://raw.githubusercontent.com/BigChangeApps/openapi-linting/main/rest/.spectral.yaml petstore.yaml
 ```
 ### Local ruleset
-For added flexibility and the ability to extend the ruleset we provide, we recommend that you create a local spectral ruleset (.spectral.yml) that remotely references this one:
+For added flexibility and the ability to [extend the ruleset](https://docs.stoplight.io/docs/spectral/83527ef2dd8c0-extending-rulesets) we provide, we recommend that you create a local [spectral ruleset](https://docs.stoplight.io/docs/spectral/d3482ff0ccae9-rules) (.spectral.yml) that remotely references this one:
 ```
 extends: 
 - https://raw.githubusercontent.com/BigChangeApps/openapi-linting/main/rest/.spectral.yaml 
