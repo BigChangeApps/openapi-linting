@@ -27,6 +27,14 @@ extends:
 rules:
  response-fail-support-problem-json: off
  schema-properties-documentation-missing: warn
+
+ contact-properties:
+   description: Contact object must have "name"
+   given: $.info.contact
+   severity: warn
+   then:
+     - field: name
+       function: truthy
 ```
 ### Rule application
 This tooling can be applied to any REST API that provides an OpenAPI specification, regardless of the language used to build that service. 
