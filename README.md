@@ -31,7 +31,7 @@ rules:
 ### Rule application
 This tooling can be applied to any REST API that provides an OpenAPI specification, regardless of the language used to build that service. 
 
-As a command-line tool, it can easily be [inserted into existing continuous integration](https://meta.stoplight.io/docs/spectral/038632fdf0d1a-continuous-integration) solutions (after an up to date OpenAPI specification file has been built) and for best developer experience, we additionally recommend using [githooks](https://git-scm.com/docs/githooks) for more immediate linting feedback. We recomend [Husky](https://typicode.github.io/husky/) and [Husky.Net](https://alirezanet.github.io/Husky.Net/) for best results.
+As a command-line tool, it can easily be [inserted into existing continuous integration](https://meta.stoplight.io/docs/spectral/038632fdf0d1a-continuous-integration) solutions (after an up to date OpenAPI specification file has been built) and for best developer experience, we additionally recommend using [githooks](https://git-scm.com/docs/githooks) for more immediate linting feedback. Consider solutions like [Husky](https://typicode.github.io/husky/) and [Husky.Net](https://alirezanet.github.io/Husky.Net/) for management of githooks for your projects.
 
 
 
