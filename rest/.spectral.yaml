@@ -278,10 +278,10 @@ rules:
       given: $.paths[*].get.responses
       then:
         function: schema
-      functionOptions:
-        schema:
-          anyOf:
-          - required: ['200']
+        functionOptions:
+          schema:
+            anyOf:
+            - required: ['200']
 
   delete-response-codes:
     description: RS400 - HTTP responses must return an acceptable status code
