@@ -299,7 +299,7 @@ rules:
   put-response-codes:
     description: RS400 - HTTP responses should return an acceptable status code
     message: "{{description}} (PUTs should usually provide a 202 or 204 response)"
-    severity: warning
+    severity: warn
     given: $.paths[*].put.responses
     then:
       function: schema
