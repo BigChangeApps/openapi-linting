@@ -163,12 +163,12 @@ rules:
       functionOptions:
         min: 15
 
-#RS207
+  #RS207
   schema-properties-example-missing:
-    description: RS207 - Payload schema fields must provide an example value
+    description: RS207 - Payload schema fields must provide an example value (except arrays)
     severity: warn
     message: "{{description}} ({{error}})"
-    given: '$..*.properties[*]'
+    given: "$..*.properties[?(@.type != 'array')]"
     then:
       field: "example"
       function: defined
