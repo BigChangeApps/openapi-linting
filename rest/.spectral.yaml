@@ -164,14 +164,14 @@ rules:
         min: 15
 
 #RS207
- schema-properties-example-missing:
-   description: RS207 - Payload schema fields must provide an example value for simple types
-   severity: warn
-   message: "{{description}} ({{error}})"
-   given: "$..*.properties[?(@.type != 'array' && @.type != 'object')]"
-   then:
-     field: "example"
-     function: defined
+  schema-properties-example-missing:
+    description: RS207 - Payload schema fields must provide an example value for simple types
+    severity: warn
+    message: "{{description}} ({{error}})"
+    given: "$..*.properties[?(@.type != 'array' && @.type != 'object')]"
+    then:
+      field: "example"
+      function: defined
 
 #RS208 - n/a
 
