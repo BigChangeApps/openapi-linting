@@ -357,7 +357,7 @@ rules:
   schema-names-pascal-case:
     description: RS501 - APIs must use camelCase for request / response payload schema
     message: "{{description}} ('{{property}}')"
-    severity: error
+    severity: warn
     type: style
     given: '$.components.schemas.*~'
     then:
