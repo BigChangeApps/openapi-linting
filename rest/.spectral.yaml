@@ -145,10 +145,10 @@ rules:
 
 #RS206
   schema-properties-documentation-missing:
-    description: RS206 - Payload schema fields must clearly document their purpose
+    description: RS206 - Payload schema fields must clearly document their purpose!!!!!
     severity: error
     message: "{{description}} ({{error}})"
-    given: '$..*.properties[*]'
+    given: "$.components.schemas[?(@.type == 'object')].properties[?(!@.$ref)]"
     then:
       field: "description"
       function: defined
