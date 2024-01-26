@@ -148,7 +148,7 @@ rules:
     description: RS206 - Payload schema fields must clearly document their purpose
     severity: error
     message: "{{description}} ({{error}})"
-    given: "$.components.schemas[?(@.type == 'object')].properties[?(!@.$ref)]"
+    given: $.components.schemas[?(@.type == 'object')].properties[?(@.type == 'string' || @.type == 'number' || @.type == 'boolean' || @.type == 'number')]
     then:
       field: "description"
       function: defined
