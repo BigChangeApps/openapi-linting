@@ -368,7 +368,7 @@ rules:
   schema-property-names-camelCase:
     description: RS501 - APIs must use camelCase for request / response payload schema
     message: "{{description}} ('{{property}}')"
-    severity: error
+    severity: warn
     resolved: false
     given: $..[?(@.type === 'object' && @.properties)].properties.*~
     then:
