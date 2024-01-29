@@ -355,7 +355,7 @@ rules:
 
 #RS501
   schema-names-pascal-case:
-    description: RS501 - APIs must use camelCase for request / response payload schema
+    description: RS501 - APIs should use camelCase for request / response payload schema
     message: "{{description}} ('{{property}}')"
     severity: warn
     type: style
@@ -366,15 +366,14 @@ rules:
         match: '^[A-Z][a-zA-Z0-9]*$'
 
   schema-property-names-camelCase:
-    description: RS501 - APIs must use camelCase for request / response payload schema
+    description: RS501 - APIs should use camelCase for request / response payload schema
     message: "{{description}} ('{{property}}')"
     severity: warn
-    resolved: false
     given: $..[?(@.type === 'object' && @.properties)].properties.*~
     then:
-      function: casing
+      function: pattern
       functionOptions:
-        type: camel
+        match: '^[a-z][a-z0-9]*(([A-Z][a-z0-9]+)*[A-Z]*?|([a-z0-9]+[A-Z])*|[A-Z])$'
 
 #RS502 - n/a
 
