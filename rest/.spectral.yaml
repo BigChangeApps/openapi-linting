@@ -397,7 +397,7 @@ rules:
     description: RS505 - Timestamp fields should be consistently named
     message: "{{description}} ({{error}})"
     severity: warn
-    given: $
+    given: $.components.schemas.*~
     then:
       function: naming-convention
       functionOptions:
