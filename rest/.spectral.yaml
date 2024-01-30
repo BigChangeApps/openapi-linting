@@ -384,24 +384,21 @@ rules:
     description: RS504 - Boolean fields should be consistently named
     message: "{{description}} ({{error}})"
     severity: warn
-    given: $
+    given: $..[?(@.type === 'object' && @.properties)].properties.[?(@.type== 'boolean')]~
     then:
-      function: naming-convention
+      function: pattern
       functionOptions:
-        type: boolean
         match: ^is
 
 #RS505
-
   schema-property-datetime-naming-convention:
     description: RS505 - Timestamp fields should be consistently named
     message: "{{description}} ({{error}})"
     severity: warn
-    given: $.components.schemas.*~
+    given: $..[?(@.type === 'object' && @.properties)].properties.[?(@.format== 'date-time')]~
     then:
-      function: naming-convention
+      function: pattern
       functionOptions:
-        type: date-time
         match: 'At$'
 
 #RS600  
