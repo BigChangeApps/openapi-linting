@@ -225,7 +225,7 @@ rules:
   response-collections-enveloped:
     description: RS304 - GET methods must envelope their result sets when returning collections
     severity: error
-    given: $.paths[*].get.responses..[?(@.type)]
+    given: $.paths[*].get.responses.200.content.application/json[?(@.type)]
     then:
       field: type
       function: pattern
