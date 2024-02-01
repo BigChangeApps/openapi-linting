@@ -238,10 +238,10 @@ rules:
 
 #RS307
   request-writes-no-query-strings:
-    description: RS307 - POST and DELETE requests should not require query strings
+    description: RS307 - POST, PUT, PATCH and DELETE requests should not require query strings
     severity: warn
     given:
-    - $.paths[*].[put,post,delete].parameters.[?(@.in == 'query')].schema
+    - $.paths[*].[put,patch,post,delete].parameters.[?(@.in == 'query')].schema
     then:
       function: undefined
 
@@ -309,6 +309,19 @@ rules:
           - required: ['202']
           - required: ['204']
 
+  patch-response-codes:
+    description: RS400 - HTTP responses should return an acceptable status code
+    message: "{{description}} (PATCHs should usually provide a 202 or 204 response)"
+    severity: warn
+    given: $.paths[*].patch.responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+          - required: ['202']
+          - required: ['204']
+
   post-response-codes:
     description: RS400 - HTTP responses must return an acceptable status code
     message: "{{description}} (POSTs must provide a 201 or 202 response)"
@@ -328,7 +341,7 @@ rules:
 
 #RS403
   response-204-no-body:
-    description: RS403 - PUT/DELETE responses must not return a response body when status code is 204
+    description: RS403 - PUT/PATCH/DELETE responses must not return a response body when status code is 204
     severity: error
     given: $.paths[*][*]].responses.204
     then:
