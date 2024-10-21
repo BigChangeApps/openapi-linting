@@ -357,7 +357,7 @@ rules:
       function: falsy
 
   response-success-support-json:
-    description: RS500 - APIs must support JSON as payload data interchange format
+    description: RS500 - APIs must support JSON or CSV as payload data interchange format
     severity: error
     given: $.paths..responses[?( @property >= 200 && @property < 300 && @property != 204)].content[*]~
     then:
@@ -365,6 +365,7 @@ rules:
       functionOptions:
         values:
           - application/json
+          - text/csv
 
 #RS501
   schema-names-pascal-case:
